@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<main class="container">
+    <h2>Registrarse</h2>
+    <form class="card card-body" method="POST">
+        {% csrf_token %}
+        <h4>{{error}}</h4>
+        {{form}}
+        <button>
+            Registrarse
+        </button>
+    </form>
+</main>
+
+{% endblock %}

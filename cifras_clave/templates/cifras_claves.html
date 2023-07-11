@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container text-center">
+    <h1 class="display-1"> Cifras Claves </h1>
+</div>
+
+<div class="d-flex justify-content-center">
+    <a class="btn btn-success mx-1" href="{% url 'crear_cifra_clave' %}">
+        Publicar un anuncio
+    </a>
+</div>
+
+<div class="container">
+    <form method="GET" action="{% url 'cifras_claves' %}" class="my-3">
+        <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Buscar anuncio...">
+            <div class="input-group-append">
+                <button class="btn btn-outline-primary" type="submit">Buscar</button>
+            </div>
+        </div>
+    </form>
+    <form method="GET" action="{% url 'cifras_claves' %}" class="my-3">
+        <div class="input-group">
+          <select name="Area" class="form-control">
+            <option value="">Todas las areas</option>
+            <option value="Gas y GLP">Gas y GLP</option>
+            <option value="Portafolio de Gas, Inversiones y Actividad Upstream">Portafolio de Gas, Inversiones y Actividad Upstream</option>
+            <option value="Energéticos sociales">Energéticos sociales</option>
+            <option value="Energías Renovables">Energías Renovables</option>
+            <option value="Gestión Energética">Gestión Energética</option>
+            <option value="Hidrógeno">Hidrógeno</option>
+            <option value="CCUS">CCUS</option>
+            <option value="Movilidad sostenible">Movilidad sostenible</option>
+            <option value="Descarbonización">Descarbonización</option>
+            <option value="Micro LNG">Micro LNG</option>
+            <option value="Offshore">Offshore</option>
+            <option value="Portafolio Gas">Portafolio Gas</option>
+            <option value="Financieros">Financieros</option>
+            <option value="Hidrocarburos">Hidrocarburos</option>
+            <option value="Dimensión Ambiental">Dimensión Ambiental</option>
+            <option value="Dimensión Social">Dimensión Social</option>
+            <option value="Transmisión y vías">Transmisión y vías</option>
+          </select>
+          <div class="input-group-append">
+            <button class="btn btn-outline-primary" type="submit">Filtrar</button>
+          </div>
+        </div>
+      </form>
+</div>
+
+<div class="container my-1">
+    <div class="row row-cols-3">
+        {% for cifra in cifras|dictsortreversed:'publicado' %}
+        <div class="col mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ cifra.titulo }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ cifra.usuario.username }}</h6>
+                    <p class="card-text">{{ cifra.descripcion }}</p>
+                    <p class="card-text"><strong>Área:</strong> {{ cifra.Area }}</p>
+                    <p class="card-text"><strong>Publicado:</strong> {{ cifra.publicado|date:'M h Y:i' }}</p>
+                </div>
+            </div>
+        </div>
+        {% if forloop.counter|divisibleby:3 %}
+        <div class="w-100"></div>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
