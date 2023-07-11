@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Crear Monto MMUSD</h1>
+
+    <form action="/proyectosrenovables/montos/create/" method="POST" class="card card-body">
+        {% csrf_token %}
+        <h4>{{error}}</h4>
+        {{form.as_p}}
+        <button>
+            Agregar registro
+        </button>
+    </form>
+
+</div>
+
+{% endblock %}

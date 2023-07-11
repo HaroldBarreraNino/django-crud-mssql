@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<main class="container">
+
+    <h1 class="text-secondary">{{monto.id}}</h1>
+    <h1 class="text-secondary">{{monto.proyecto}}</h1>
+    {{error}}
+    <form method="POST">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button class="btn btn-primary">
+            Actualizar
+        </button>
+    </form>
+    <div class="mt-2 d-flex">
+
+        <form action="{% url 'borrar_renovable_montomw' monto.id %}" method="POST">
+            {% csrf_token %}
+            <button class="btn btn-danger">
+                Borrar
+            </button>
+        </form>
+    </div>
+
+</main>
+
+
+{% endblock %}

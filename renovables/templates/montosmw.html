@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1 class="d-flex justify-content-center display-3">MW Incorporadas por año</h1>
+<div class="d-flex justify-content-center">
+    <a class="btn btn-success mx-1" href="{% url 'crear_renovable_montomw' %}">
+        Agregar monto
+    </a>
+    <form action="{% url 'excel_renovables_montosmw' %}" method="POST">
+        {% csrf_token %}
+        <button class="btn btn-primary" type="submit">Exportar a Excel</button>
+    </form>
+</div>
+<div class="d-flex justify-content-center my-4">
+    <a class="btn btn-info mx-1" href="{% url 'proyectos_renovables' %}">
+        Proyectos renovables
+    </a>
+    <a class="btn btn-info mx-1" href="{% url 'renovables_montos' %}">
+        Montos MMUSD
+    </a>
+</div>
+<div class="container">
+    <form method="GET" action="{% url 'renovables_montosmw' %}" class="my-3">
+        <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Buscar proyecto...">
+            <div class="input-group-append">
+                <button class="btn btn-outline-primary" type="submit">Buscar</button>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md mx-auto" style="max-width: 300px;">
+            <table class="table table-bordered table-hover table-sm table-responsive my-3">
+                <thead class="thead-dark">
+                    <th>Proyecto</th>
+                    <th>Año</th>
+                    <th>Monto</th>
+                </thead>
+                <tbody>
+                    {% for monto in montos %}
+                    <tr>
+                        <td><a href="{% url 'renovable_montosmw_detalle' monto.id %}">{{monto.proyecto}}</a></td>
+                        <td>{{monto.año}}</td>
+                        <td>{{monto.montomw}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

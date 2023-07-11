@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1 class="d-flex justify-content-center display-3">Proyectos Renovables</h1>
+<div class="d-flex justify-content-center">
+    <a class="btn btn-success mx-1" href="{% url 'crear_proyecto_renovable' %}">
+        Agregar proyecto
+    </a>
+    <form action="{% url 'excel_renovables' %}" method="POST" class="mx-1">
+        {% csrf_token %}
+        <button class="btn btn-primary" type="submit">Exportar a Excel</button>
+    </form>
+</div>
+
+<div class="d-flex justify-content-center my-4">
+    <a class="btn btn-info mx-1" href="{% url 'renovables_montos' %}">
+        Montos MMUSD
+    </a>
+    <a class="btn btn-info mx-1" href="{% url 'renovables_montosmw' %}">
+        MW incorporada por año
+    </a>
+</div>
+
+<div class="container">
+    <form method="GET" action="{% url 'proyectos_renovables' %}" class="my-3">
+        <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Buscar proyecto...">
+            <div class="input-group-append">
+                <button class="btn btn-outline-primary" type="submit">Buscar</button>
+            </div>
+        </div>
+    </form>
+    <form method="GET" action="{% url 'proyectos_renovables' %}" class="my-3">
+        <div class="input-group">
+          <select name="tecnologia" class="form-control">
+            <option value="">Filtrar por Tecnologia</option>
+            <option value="Biomasa">Biomasa</option>
+            <option value="Eolico">Eolico</option>
+            <option value="Geotermia">Geotermia</option>
+            <option value="Hidraulica">Hidraulica</option>
+            <option value="Solar Fotovoltaica">Solar Fotovoltaica</option>
+          </select>
+          <div class="input-group-append">
+            <button class="btn btn-outline-primary" type="submit">Filtrar</button>
+          </div>
+        </div>
+      </form>
+</div>
+
+<table class="table table-bordered table-hover table-sm table-responsive my-3">
+    <thead class="thead-dark">
+        <tr>
+            <th rowspan="4">Nombre</th>
+            <th rowspan="4">Tecnologia</th>
+            <th rowspan="4">Estado</th>
+            <th rowspan="4">Tipo</th>
+            <th rowspan="4">Esquema de negocio</th>
+            <th rowspan="4">Departamento</th>
+            <th rowspan="4">Ecopetrol/Filial</th>
+            <th rowspan="4">Vicep/Filial</th>
+            <th rowspan="4">Activo</th>
+            <th rowspan="4">Capacidad Instalada MW/MWp DC</th>
+            <th rowspan="4">Reduccion CO2 (ktCO2/Año)</th>
+            <th rowspan="4">Inversion Ecopetrol</th>
+            <th rowspan="4">Riesgo No Materializacion</th>
+            <th rowspan="4">Observaciones</th>
+            <th rowspan="4">Lider iniciativa</th>
+            <th colspan="2">Monto por año (MMUSD)</th>
+            <th colspan="2">MW Incorporadas por año</th>
+        </tr>
+        <tr>
+            <th>Año</th>
+            <th>Monto</th>
+            <th>Año</th>
+            <th>MW</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for proyecto in proyectos %}
+        <tr>
+            <td><a href="{% url 'proyecto_renovable_detalle' proyecto.id %}">{{proyecto.nombre_del_proyecto}}</a></td>
+            <td>{{proyecto.tecnologia}}</td>
+            <td>{{proyecto.estado}}</td>
+            <td>{{proyecto.tipo}}</td>
+            <td>{{proyecto.esquema_de_negocio}}</td>
+            <td>{{proyecto.departamento}}</td>
+            <td>{{proyecto.ecopetrol_filial}}</td>
+            <td>{{proyecto.vicep_filial}}</td>
+            <td>{{proyecto.activo}}</td>
+            <td>{{proyecto.capacidad_instalada_MW_MWp_DC}}</td>
+            <td>{{proyecto.reduccion_co2_ktCO2_año}}</td>
+            <td>{{proyecto.inversion_ecopetrol}}</td>
+            <td>{{proyecto.riesgo_materializacion}}</td>
+            <td>{{proyecto.observaciones}}</td>
+            <td>{{proyecto.lider_iniciativa}}</td>
+            <td>
+                {% for monto in proyecto.monto_pid_mmusd_set.all %}
+                {{ monto.año }}<br>
+                {% empty %}
+                No hay datos disponibles
+                {% endfor %}
+            </td>
+            <td>
+                {% for monto in proyecto.monto_pid_mmusd_set.all %}
+                {{ monto.monto }}<br>
+                {% empty %}
+                No hay datos disponibles
+                {% endfor %}
+            </td>
+            <td>
+                {% for mw in proyecto.mw_incorporadas_por_ano_set.all %}
+                {{ mw.año }}<br>
+                {% empty %}
+                No hay datos disponibles
+                {% endfor %}
+            </td>
+            <td>
+                {% for mw in proyecto.mw_incorporadas_por_ano_set.all %}
+                {{ mw.montomw }}<br>
+                {% empty %}
+                No hay datos disponibles
+                {% endfor %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
